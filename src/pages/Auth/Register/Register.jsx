@@ -1,10 +1,10 @@
 import { Button, Col, Form, Input, Row, Typography } from 'antd'
-import Password from 'antd/es/input/Password'
 import React, { useState } from 'react'
 import { auth, db } from '../../../config/firebase'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import { doc, serverTimestamp, setDoc } from 'firebase/firestore'
-import { supabase } from '../../../config/supbase'
+import { useNavigate } from 'react-router-dom'
+// import { supabase } from '../../../config/supbase'
 
 const initialState = { firstName: "", lastName: "", email: "", password: "", confirmPassword: "" }
 const Register = () => {
@@ -13,9 +13,9 @@ const Register = () => {
   const [state, setState] = useState(initialState)
   const [isProcessing, setisProcessing] = useState(false)
   const handleChange = e => setState(s => ({ ...s, [e.target.name]: e.target.value }))
+  const navigate = useNavigate()
 
-
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     let { firstName, lastName, email, password, confirmPassword } = state
     firstName = firstName.trim();
     lastName = lastName.trim();
@@ -25,14 +25,35 @@ const Register = () => {
     if (firstName.length < 3) return window.MessageAlert("Enter Name Correctly ", "error")
     if (!window.EmailCheck(email)) return window.MessageAlert("Enter Email  Correctly ", "error")
     if (password != confirmPassword) return window.MessageAlert("Enter Email  Correctly ", "error")
-    setisPocessing(true)
-    const formData = { firstName, lastName, email,createAt:serverTimestamp(), userontis:"website" }
+    setisProcessing(true)
+    const formData = { firstName, lastName, email, createAt: serverTimestamp(), createForm: "website" }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        createDocument({ ...formData, uid: user.uid })
+        navigate("/")
+        window.MessageAlert("Form is Successfully Submit", "success")
+      })
+      .catch((error) => {
+        console.log(error)
+        window.MessageAlert("Somthing's went wrong", "error")
+      });
+  }
 
+
+  const createDocument = async(userdata) => {
+    try {
+      await setDoc(doc(db, "user", userdata.uid),userdata);
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }finally{
+      setisProcessing(false)
+    }
   }
 
 
 
-  
 
 
   return (

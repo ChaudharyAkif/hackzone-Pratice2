@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import { useAuthContext } from '../../context/Auth'
 
 const Navbar = () => {
-    const { isAuth,handleLogout } = useAuthContext()
-
+    const { isAuth } = useAuthContext()
+console.log(isAuth)
     return (
         <>
             <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
@@ -24,23 +24,23 @@ const Navbar = () => {
                             </li>                 </ul>
                         <div className="d-flex gap-2      ">
 
-                            {/* {!isAuth */}
+                            {!isAuth
 
-                                {/* ? <> */}
+                               ? <> 
                                     <Link to={"/auth/login"}>
                                         <button className="btn btn-outline-info" >Login</button>
                                     </Link>
                                     <Link to={"/auth/register"}>
                                         <button className="btn btn-outline-success" >Register</button>
                                     </Link>
-                                {/* </> */}
-                                {/* : <> */}
-                                    {/* <Link to={"/auth/dashboard"}>
+                                 </> 
+                                : <> 
+                                     <Link to={"/auth/dashboard"}>
                                         <button className="btn btn-outline-warning" >Dashboard</button>
                                     </Link>
-                                        <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button> */}
-                                {/* </> */}
-                            {/* } */}
+                                        <button className="btn btn-outline-danger" onClick={handleLogout}>Logout</button> 
+                                 </> 
+                             } 
 
 
                         </div>

@@ -29,7 +29,8 @@ const Login = () => {
             })
             .catch((error) => {
                 console.log(error)
-                if (error === "auth/invalid/email") return navigate("/auth/register");
+                if(error ==="/authinvalid/email") return navigate("/auth/register")
+                // if (error === "auth/invalid/email") return navigate("/auth/register");
                 window.MessageAlert("Somethings Want's Wrongs ", "error");
             })
 
